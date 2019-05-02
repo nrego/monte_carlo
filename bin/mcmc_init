@@ -1,0 +1,26 @@
+#!/Users/nickrego/anaconda2/bin/python2.7
+
+from __future__ import division, print_function
+
+import logging, argparse, traceback
+log = logging.getLogger('mcmc_init')
+
+import mcmc
+
+
+parser = argparse.ArgumentParser('mcmc_init', description='preprocess config files. initialize new simulation.')
+mcmc.rc.add_args(parser)
+parser.add_argument('-p', '--paramfile', metavar='PARAMFILE', dest='paramfile', default='params.cfg',
+                    help='Initialize simulation parameters from PARAMFILE')
+work_managers.environment.add_wm_args(parser)
+
+
+
+args = parser.parse_args()
+mcmc.rc.process_args(args)
+
+sim_manager = mcmc.rc.get_sim_manager()
+data_manager = mcmc.rc.get_data_manager()
+
+sim_manager.initialize(args.paramfile)
+data_manager.dump_state()
